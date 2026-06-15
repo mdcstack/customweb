@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coffee Adventure? ☕</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
+<title>Plss say yess!</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4b6e'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E" type="image/svg+xml">
 
 <style>
+    /* --- Your Existing Heart Background CSS --- */
     * {
         margin: 0;
         padding: 0;
@@ -16,18 +17,15 @@
     body {
         overflow: hidden;
         height: 100vh;
-        /* Cozy latte/mocha gradient */
-        background: linear-gradient(135deg, #d4a373, #faedcd);
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         transition: background 1s ease; 
     }
 
-    /* Floating Cafe Items */
-    .floating-item {
+    .heart {
         position: absolute;
         bottom: -50px;
-        /* Rich espresso color for the floating icons (affects monochrome emojis mostly) */
-        color: rgba(92, 64, 51, 0.7); 
+        color: rgba(255, 255, 255, 0.85); 
         font-size: 20px;
         animation: floatUp linear forwards;
         user-select: none;
@@ -36,11 +34,10 @@
         transition: color 0.5s ease, text-shadow 0.5s ease; 
     }
 
-    /* --- The Success State Floating Items --- */
-    body.success .floating-item {
-        /* Darker, glowing coffee brown on success */
-        color: #4a3219; 
-        text-shadow: 0 0 12px rgba(111, 78, 55, 0.6); 
+    /* --- The Success State Hearts --- */
+    body.success .heart {
+        color: #ff003c; 
+        text-shadow: 0 0 12px rgba(255, 0, 60, 0.6); 
     }
 
     @keyframes floatUp {
@@ -71,24 +68,13 @@
     }
 
     h1 {
-        /* Mocha text color */
-        color: #5c4033;
+        color: #ff4b6e;
         margin-bottom: 30px;
         font-size: 28px;
         line-height: 1.4;
     }
 
-    /* --- The Smart Blinking Cursor --- */
-    .typing-active::after {
-        content: '|';
-        animation: blink 0.7s infinite;
-    }
-
-    @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
-    }
-
+    /* --- The Bouncing Loading Dots --- */
     .bounce-dot {
         display: inline-block;
         animation: bounceDot 0.5s infinite alternate;
@@ -123,23 +109,23 @@
 
     /* Continue Button Specific Styling */
     #continue-btn {
-        background-color: #6f4e37; /* Coffee brown */
+        background-color: #ff4b6e; 
         color: white;
         margin-top: 10px;
         animation: pulse 1.5s infinite alternate;
     }
     
-    #continue-btn:hover { background-color: #4a3219; transform: scale(1.05); }
+    #continue-btn:hover { background-color: #ff1c45; transform: scale(1.05); }
 
     @keyframes pulse {
         0% { transform: scale(1); }
         100% { transform: scale(1.05); }
     }
 
-    #yes-btn { background-color: #6f4e37; color: white; }
-    #yes-btn:hover { background-color: #4a3219; }
-    #no-btn { background-color: #e6d5b8; color: #5c4033; }
-    #no-btn:hover { background-color: #d4a373; color: white; }
+    #yes-btn { background-color: #ff4b6e; color: white; }
+    #yes-btn:hover { background-color: #ff1c45; }
+    #no-btn { background-color: #f0f0f0; color: #555; }
+    #no-btn:hover { background-color: #e0e0e0; }
 
     @keyframes fadeInEffect {
         0% { opacity: 0; transform: translateY(10px); }
@@ -176,12 +162,12 @@
     <h1 id="typing-text"></h1>
 
     <div id="continue-container" style="display: none; opacity: 0; flex-direction: column; align-items: center;">
-        <h1 style="font-size: 24px; margin-bottom: 20px;">syempre let's set the mood muna,<br> plss click to continue</h1>
+        <h1 style="font-size: 24px; margin-bottom: 20px;">plss click to continue</h1>
         <button id="continue-btn">Continue</button>
     </div>
 
     <div id="main-content" style="display: none; opacity: 0;">
-        <h1 id="question">Will you go coffee hopping with me?</h1>
+        <h1 id="question">Will you go on a date with me?</h1>
         <div class="button-container">
             <button id="yes-btn">Yes</button>
             <button id="no-btn">No</button>
@@ -190,30 +176,22 @@
 </div>
 
 <script>
-    /* --- Cafe Items Animation JS --- */
-    function createFloatingItem() {
-        const item = document.createElement("div");
-        item.classList.add("floating-item");
-        
-        // Randomly pick between coffee, croissant, and cookie
-        const cafeEmojis = ["☕", "🥐", "🍪"];
-        item.innerHTML = cafeEmojis[Math.floor(Math.random() * cafeEmojis.length)]; 
-        
-        item.style.left = Math.random() * window.innerWidth + "px";
+    /* --- Your Existing Heart Animation JS --- */
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "❤";
+        heart.style.left = Math.random() * window.innerWidth + "px";
         const size = Math.random() * 30 + 15;
-        item.style.fontSize = size + "px";
+        heart.style.fontSize = size + "px";
         const duration = Math.random() * 6 + 6;
-        item.style.animationDuration = duration + "s";
-        item.style.opacity = Math.random();
-        document.body.appendChild(item);
+        heart.style.animationDuration = duration + "s";
+        heart.style.opacity = Math.random();
+        document.body.appendChild(heart);
 
-        setTimeout(() => { item.remove(); }, duration * 1000);
+        setTimeout(() => { heart.remove(); }, duration * 1000);
     }
-
-    const isMobile = window.innerWidth < 768;
-    const spawnRate = isMobile ? 150 : 50;
-    
-    setInterval(createFloatingItem, spawnRate);
+    setInterval(createHeart, 50);
 
     /* --- The Typing Animation Logic --- */
     const typingText = document.getElementById("typing-text");
@@ -222,10 +200,12 @@
     const continueContainer = document.getElementById("continue-container");
     const continueBtn = document.getElementById("continue-btn");
     
-    // Intro Phrases
+    // Intro Phrases (Part 1)
     const phrase1 = "hi po cutiee";
-    const phrase2 = "I wanna ask you a question";
+    const phrase2 = "am here to ask you a question";
     const phrase3 = "I know you're smart kaya madali mo to masasagot";
+
+    // Intro Phrases (Part 2 - After Continue)
     const phrase4 = "since you're up for the task";
     const phrase5 = "here it goes";
 
@@ -233,7 +213,7 @@
     const endPhrase1 = "glad you picked the right option";
     const endPhrase2 = "you did agree as fast you can right 🤨";
     const endPhrase3 = "no worries I trust you cutiee so";
-    const endPhrase4 = "no pressure and I hope you are as excited as I am ☕"; 
+    const endPhrase4 = "no pressure and I hope you are as excited as I am 🥰";
     const endPhrase5 = "wear something nice and comfy cuz";
     const finalDateText = "I'll be seeing you po this coming Friday at SM Dasma 10 PM! 🎉";
     
@@ -241,17 +221,12 @@
     const pauseBetweenPhrases = 2500; 
 
     function typeWriter(element, text, i, callback) {
-        if (i === 0) {
-            element.classList.add("typing-active");
-        }
-
         const characters = Array.from(text); 
         
         if (i < characters.length) {
             element.innerHTML += characters[i];
             setTimeout(() => typeWriter(element, text, i + 1, callback), typingSpeed);
         } else {
-            element.classList.remove("typing-active");
             element.innerHTML += '<span class="bounce-dot">.</span><span class="bounce-dot">.</span><span class="bounce-dot">.</span>';
             setTimeout(callback, pauseBetweenPhrases);
         }
@@ -273,25 +248,16 @@
 
     window.onload = startSequence;
 
+
     /* --- Audio Trigger Logic --- */
     const bgMusic = document.getElementById("bg-music");
     let isMusicPlaying = false; 
 
     function startMusic() {
         if (!isMusicPlaying) {
-            bgMusic.currentTime = 18; 
-            bgMusic.volume = 0; 
-            
+            bgMusic.currentTime = 5; 
             bgMusic.play().catch(e => console.log("Audio error:", e));
             isMusicPlaying = true; 
-            
-            const fadeAudio = setInterval(() => {
-                if (bgMusic.volume < 1.0) {
-                    bgMusic.volume = Math.min(1.0, bgMusic.volume + 0.05);
-                } else {
-                    clearInterval(fadeAudio);
-                }
-            }, 100); 
         }
     }
 
@@ -312,6 +278,7 @@
         });
     });
 
+
     // --- Post-Yes Sequence ---
     function startEndingSequence() {
         questionText.innerHTML = ""; 
@@ -325,6 +292,7 @@
                 typeWriter(questionText, endPhrase4, 0, () => {
                 questionText.innerHTML = ""; 
                 typeWriter(questionText, endPhrase5, 0, () => {
+                    // Final reveal! 
                     questionText.innerHTML = finalDateText; 
                          });
                     });
@@ -332,6 +300,7 @@
             });
         });
     }
+
 
     /* --- The Interactive Logic --- */
     const noButton = document.getElementById("no-btn");
@@ -413,10 +382,7 @@
         for (let i = 0; i < lastSpawnCount; i++) {
             const emoji = document.createElement("div");
             emoji.classList.add("burst-emoji"); 
-            
-            // Includes the pastry emojis in the success burst as well!
-            const successEmojis = ["☕", "🥐", "🍪", "🤎", "✨"];
-            emoji.innerText = successEmojis[Math.floor(Math.random() * successEmojis.length)]; 
+            emoji.innerText = "🥰"; 
 
             const randomX = modalRect.left + (Math.random() * (modalRect.width - 30));
             const randomY = modalRect.top + (Math.random() * (modalRect.height - 30));
