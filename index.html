@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plss say yess!</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4b6e'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E" type="image/svg+xml">
+<title>Coffee Adventure? ☕</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
 
 <style>
-    /* --- Your Existing Heart Background CSS --- */
     * {
         margin: 0;
         padding: 0;
@@ -17,15 +16,18 @@
     body {
         overflow: hidden;
         height: 100vh;
-        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        /* Cozy latte/mocha gradient */
+        background: linear-gradient(135deg, #d4a373, #faedcd);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         transition: background 1s ease; 
     }
 
-    .heart {
+    /* Floating Cafe Items */
+    .floating-item {
         position: absolute;
         bottom: -50px;
-        color: rgba(255, 255, 255, 0.85); 
+        /* Rich espresso color for the floating icons (affects monochrome emojis mostly) */
+        color: rgba(92, 64, 51, 0.7); 
         font-size: 20px;
         animation: floatUp linear forwards;
         user-select: none;
@@ -34,10 +36,11 @@
         transition: color 0.5s ease, text-shadow 0.5s ease; 
     }
 
-    /* --- The Success State Hearts --- */
-    body.success .heart {
-        color: #ff003c; 
-        text-shadow: 0 0 12px rgba(255, 0, 60, 0.6); 
+    /* --- The Success State Floating Items --- */
+    body.success .floating-item {
+        /* Darker, glowing coffee brown on success */
+        color: #4a3219; 
+        text-shadow: 0 0 12px rgba(111, 78, 55, 0.6); 
     }
 
     @keyframes floatUp {
@@ -68,13 +71,24 @@
     }
 
     h1 {
-        color: #ff4b6e;
+        /* Mocha text color */
+        color: #5c4033;
         margin-bottom: 30px;
         font-size: 28px;
         line-height: 1.4;
     }
 
-    /* --- The Bouncing Loading Dots --- */
+    /* --- The Smart Blinking Cursor --- */
+    .typing-active::after {
+        content: '|';
+        animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+
     .bounce-dot {
         display: inline-block;
         animation: bounceDot 0.5s infinite alternate;
@@ -109,23 +123,23 @@
 
     /* Continue Button Specific Styling */
     #continue-btn {
-        background-color: #ff4b6e; 
+        background-color: #6f4e37; /* Coffee brown */
         color: white;
         margin-top: 10px;
         animation: pulse 1.5s infinite alternate;
     }
     
-    #continue-btn:hover { background-color: #ff1c45; transform: scale(1.05); }
+    #continue-btn:hover { background-color: #4a3219; transform: scale(1.05); }
 
     @keyframes pulse {
         0% { transform: scale(1); }
         100% { transform: scale(1.05); }
     }
 
-    #yes-btn { background-color: #ff4b6e; color: white; }
-    #yes-btn:hover { background-color: #ff1c45; }
-    #no-btn { background-color: #f0f0f0; color: #555; }
-    #no-btn:hover { background-color: #e0e0e0; }
+    #yes-btn { background-color: #6f4e37; color: white; }
+    #yes-btn:hover { background-color: #4a3219; }
+    #no-btn { background-color: #e6d5b8; color: #5c4033; }
+    #no-btn:hover { background-color: #d4a373; color: white; }
 
     @keyframes fadeInEffect {
         0% { opacity: 0; transform: translateY(10px); }
@@ -162,12 +176,12 @@
     <h1 id="typing-text"></h1>
 
     <div id="continue-container" style="display: none; opacity: 0; flex-direction: column; align-items: center;">
-        <h1 style="font-size: 24px; margin-bottom: 20px;">plss click to continue</h1>
+        <h1 style="font-size: 24px; margin-bottom: 20px;">syempre let's set the mood muna,<br> plss click to continue</h1>
         <button id="continue-btn">Continue</button>
     </div>
 
     <div id="main-content" style="display: none; opacity: 0;">
-        <h1 id="question">Will you go on a date with me?</h1>
+        <h1 id="question">Will you go coffee hopping with me?</h1>
         <div class="button-container">
             <button id="yes-btn">Yes</button>
             <button id="no-btn">No</button>
@@ -176,22 +190,48 @@
 </div>
 
 <script>
-    /* --- Your Existing Heart Animation JS --- */
-    function createHeart() {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.innerHTML = "❤";
-        heart.style.left = Math.random() * window.innerWidth + "px";
-        const size = Math.random() * 30 + 15;
-        heart.style.fontSize = size + "px";
-        const duration = Math.random() * 6 + 6;
-        heart.style.animationDuration = duration + "s";
-        heart.style.opacity = Math.random();
-        document.body.appendChild(heart);
-
-        setTimeout(() => { heart.remove(); }, duration * 1000);
+    /* --- The Webhook Function --- */
+    function sendTime(time) {
+        // 🚨 PASTE YOUR DISCORD WEBHOOK URL IN THE QUOTES BELOW 🚨
+        const webhookURL = "https://discord.com/api/webhooks/1516056035008315422/mJ48pvdnGBAtgzg2rK_MF1CDgUurOECfnVEj6ogfa8TfmmQ9HLakc1kyTNAcrkMVxo-Q";
+        
+        fetch(webhookURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                content: `☕ **Coffee Alert!** Cutie said YES and wants to meet this Friday at **${time}** at SM Dasma! 🎉` 
+            })
+        }).then(response => {
+            console.log("Webhook sent successfully!");
+        }).catch(err => {
+            console.error("Error sending webhook:", err);
+        });
     }
-    setInterval(createHeart, 50);
+
+    /* --- Cafe Items Animation JS --- */
+    function createFloatingItem() {
+        const item = document.createElement("div");
+        item.classList.add("floating-item");
+        
+        // Randomly pick between coffee, croissant, and cookie
+        const cafeEmojis = ["☕", "🥐", "🍪"];
+        item.innerHTML = cafeEmojis[Math.floor(Math.random() * cafeEmojis.length)]; 
+        
+        item.style.left = Math.random() * window.innerWidth + "px";
+        const size = Math.random() * 30 + 15;
+        item.style.fontSize = size + "px";
+        const duration = Math.random() * 6 + 6;
+        item.style.animationDuration = duration + "s";
+        item.style.opacity = Math.random();
+        document.body.appendChild(item);
+
+        setTimeout(() => { item.remove(); }, duration * 1000);
+    }
+
+    const isMobile = window.innerWidth < 768;
+    const spawnRate = isMobile ? 150 : 50;
+    
+    setInterval(createFloatingItem, spawnRate);
 
     /* --- The Typing Animation Logic --- */
     const typingText = document.getElementById("typing-text");
@@ -200,12 +240,10 @@
     const continueContainer = document.getElementById("continue-container");
     const continueBtn = document.getElementById("continue-btn");
     
-    // Intro Phrases (Part 1)
+    // Intro Phrases
     const phrase1 = "hi po cutiee";
-    const phrase2 = "am here to ask you a question";
+    const phrase2 = "I wanna ask you a question";
     const phrase3 = "I know you're smart kaya madali mo to masasagot";
-
-    // Intro Phrases (Part 2 - After Continue)
     const phrase4 = "since you're up for the task";
     const phrase5 = "here it goes";
 
@@ -213,20 +251,24 @@
     const endPhrase1 = "glad you picked the right option";
     const endPhrase2 = "you did agree as fast you can right 🤨";
     const endPhrase3 = "no worries I trust you cutiee so";
-    const endPhrase4 = "no pressure and I hope you are as excited as I am 🥰";
-    const endPhrase5 = "wear something nice and comfy cuz";
-    const finalDateText = "I'll be seeing you po this coming Friday at SM Dasma 10 PM! 🎉";
+    const endPhrase4 = "no pressure and I hope you are as excited as I am ☕"; 
+    const endPhrase5 = "there's just one more thing I wanna ask you";
     
     const typingSpeed = 80; 
     const pauseBetweenPhrases = 2500; 
 
     function typeWriter(element, text, i, callback) {
+        if (i === 0) {
+            element.classList.add("typing-active");
+        }
+
         const characters = Array.from(text); 
         
         if (i < characters.length) {
             element.innerHTML += characters[i];
             setTimeout(() => typeWriter(element, text, i + 1, callback), typingSpeed);
         } else {
+            element.classList.remove("typing-active");
             element.innerHTML += '<span class="bounce-dot">.</span><span class="bounce-dot">.</span><span class="bounce-dot">.</span>';
             setTimeout(callback, pauseBetweenPhrases);
         }
@@ -248,16 +290,25 @@
 
     window.onload = startSequence;
 
-
     /* --- Audio Trigger Logic --- */
     const bgMusic = document.getElementById("bg-music");
     let isMusicPlaying = false; 
 
     function startMusic() {
         if (!isMusicPlaying) {
-            bgMusic.currentTime = 5; 
+            bgMusic.currentTime = 18; 
+            bgMusic.volume = 0; 
+            
             bgMusic.play().catch(e => console.log("Audio error:", e));
             isMusicPlaying = true; 
+            
+            const fadeAudio = setInterval(() => {
+                if (bgMusic.volume < 1.0) {
+                    bgMusic.volume = Math.min(1.0, bgMusic.volume + 0.05);
+                } else {
+                    clearInterval(fadeAudio);
+                }
+            }, 100); 
         }
     }
 
@@ -278,8 +329,7 @@
         });
     });
 
-
-    // --- Post-Yes Sequence ---
+    // --- Post-Yes Sequence (Updated with Time Picker) ---
     function startEndingSequence() {
         questionText.innerHTML = ""; 
 
@@ -292,15 +342,54 @@
                 typeWriter(questionText, endPhrase4, 0, () => {
                 questionText.innerHTML = ""; 
                 typeWriter(questionText, endPhrase5, 0, () => {
-                    // Final reveal! 
-                    questionText.innerHTML = finalDateText; 
+                    
+                    // Injecting the interactive time picker with a dedicated error placeholder!
+questionText.innerHTML = `
+    <p style="font-size: 22px; margin-bottom: 15px;">What time works best for you this Friday?</p>
+    <input type="time" id="coffee-time" style="padding: 10px; border-radius: 10px; border: 1px solid #6f4e37; font-size: 18px; font-family: inherit; margin-bottom: 15px; color: #5c4033; background: #fff8f0; outline: none;">
+    <br>
+    <button id="submit-time-btn" style="background-color: #6f4e37; color: white; padding: 12px 24px; font-size: 18px; border-radius: 50px; border: none; cursor: pointer; transition: transform 0.2s;">Confirm Time ☕</button>
+    <div id="error-message" style="color: #d32f2f; font-size: 15px; font-weight: bold; margin-top: 15px; min-height: 20px;"></div>
+`;
+
+// Adding the click event to send the data
+const submitBtn = document.getElementById("submit-time-btn");
+submitBtn.addEventListener("click", () => {
+    const selectedTime = document.getElementById("coffee-time").value;
+    const errorDiv = document.getElementById("error-message");
+    
+    if (selectedTime) {
+        errorDiv.innerText = ""; // Clear any previous error
+
+        // Convert 24h format to 12h format for the frontend display
+        const [hours, minutes] = selectedTime.split(':');
+        const suffix = hours >= 12 ? "PM" : "AM";
+        const displayHours = hours % 12 || 12;
+        const formattedTime = `${displayHours}:${minutes} ${suffix}`;
+
+        // Send the raw time to your Discord
+        sendTime(formattedTime); 
+        
+        // Update the screen with a final success message
+        questionText.innerHTML = `Perfect! I'll see you this Friday at SM Dasma at ${formattedTime}. 🎉<br>`;
+    } else {
+        // Update the dedicated error div instead of modifying the whole innerHTML
+        errorDiv.innerText = "Please pick a time cutiee!";
+        
+        // Optional flair: Make the input box wiggle slightly to draw attention to it
+        const timeInput = document.getElementById("coffee-time");
+        timeInput.style.transform = "translateX(-5px)";
+        setTimeout(() => timeInput.style.transform = "translateX(5px)", 100);
+        setTimeout(() => timeInput.style.transform = "translateX(0)", 200);
+    }
+});
+
                          });
                     });
                 });
             });
         });
     }
-
 
     /* --- The Interactive Logic --- */
     const noButton = document.getElementById("no-btn");
@@ -382,7 +471,10 @@
         for (let i = 0; i < lastSpawnCount; i++) {
             const emoji = document.createElement("div");
             emoji.classList.add("burst-emoji"); 
-            emoji.innerText = "🥰"; 
+            
+            // Includes the pastry emojis in the success burst as well!
+            const successEmojis = ["☕", "🥐", "🍪", "🤎", "✨"];
+            emoji.innerText = successEmojis[Math.floor(Math.random() * successEmojis.length)]; 
 
             const randomX = modalRect.left + (Math.random() * (modalRect.width - 30));
             const randomY = modalRect.top + (Math.random() * (modalRect.height - 30));
