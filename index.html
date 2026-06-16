@@ -62,12 +62,13 @@
         text-align: center;
         z-index: 10; 
         min-width: 320px;
-        max-width: 80%; 
+        max-width: 90%; /* Slightly wider for mobile screens */
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        min-height: 200px; 
+        min-height: 200px;
+        overflow: hidden; /* NEW: Forces everything to stay inside the white box */
     }
 
     h1 {
@@ -108,6 +109,8 @@
         justify-content: center;
         align-items: center;
         gap: 20px;
+        flex-wrap: wrap; /* NEW: Pushes the 'No' button down instead of off-screen */
+        width: 100%; /* NEW: Ensures the container respects the modal's edges */
     }
 
     button {
@@ -118,7 +121,11 @@
         border-radius: 50px;
         cursor: pointer;
         transition: all 0.3s ease; 
-        white-space: nowrap;
+        
+        /* The fixes for the growing button: */
+        max-width: 100%; /* NEW: Stops the button from growing wider than the modal */
+        white-space: normal; /* NEW: Replaces nowrap so text can wrap safely */
+        word-break: break-word; /* NEW: Breaks long words if the font gets gigantic */
     }
 
     /* Continue Button Specific Styling */
