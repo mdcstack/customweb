@@ -62,13 +62,12 @@
         text-align: center;
         z-index: 10; 
         min-width: 320px;
-        max-width: 90%; /* Slightly wider for mobile screens */
+        max-width: 80%; 
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        min-height: 200px;
-        overflow: hidden; /* NEW: Forces everything to stay inside the white box */
+        min-height: 200px; 
     }
 
     h1 {
@@ -105,14 +104,18 @@
     }
 
     .button-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-        flex-wrap: wrap; /* NEW: Pushes the 'No' button down instead of off-screen */
-        width: 100%; /* NEW: Ensures the container respects the modal's edges */
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    min-height: 140px;
+    width: 100%;
+}
 
+#yes-btn,
+#no-btn {
+    transition: all 0.3s ease;
+}
     button {
         padding: 12px 24px;
         font-size: 18px;
@@ -121,11 +124,7 @@
         border-radius: 50px;
         cursor: pointer;
         transition: all 0.3s ease; 
-        
-        /* The fixes for the growing button: */
-        max-width: 100%; /* NEW: Stops the button from growing wider than the modal */
-        white-space: normal; /* NEW: Replaces nowrap so text can wrap safely */
-        word-break: break-word; /* NEW: Breaks long words if the font gets gigantic */
+        white-space: nowrap;
     }
 
     /* Continue Button Specific Styling */
@@ -171,6 +170,30 @@
         40% { transform: scale(1.2) translateY(-30px); opacity: 1; }
         100% { transform: scale(1) translateY(-80px); opacity: 0; }
     }
+
+   @media (max-width: 768px) {
+
+    .modal {
+        width: 90%;
+        max-width: 90%;
+        padding: 25px;
+    }
+
+    #question {
+        font-size: 22px;
+        line-height: 1.4;
+        overflow-wrap: break-word;
+    }
+
+    .button-container {
+        min-height: 180px;
+        overflow: visible;
+    }
+
+    #yes-btn {
+        transform-origin: center center;
+    }
+}
 </style>
 </head>
 <body>
@@ -404,9 +427,7 @@ submitBtn.addEventListener("click", () => {
     const buttonContainer = document.querySelector(".button-container");
     const modalElement = document.querySelector(".modal"); 
 
-    let yesFontSize = 18;
-    let yesPaddingV = 12; 
-    let yesPaddingH = 24; 
+    let yesScale = 1;
 
     let noFontSize = 18;
     let noPaddingV = 12;
@@ -443,23 +464,21 @@ submitBtn.addEventListener("click", () => {
 
         emojisToSpawn *= 1.5;
 
-        yesFontSize += 15; 
-        yesPaddingV += 10;
-        yesPaddingH += 20;
+        // Grow Yes visually without affecting layout
+yesScale += 0.25;
+yesButton.style.transform = `scale(${yesScale})`;
 
-        noFontSize -= 2;
-        noPaddingV -= 2;
-        noPaddingH -= 2;
+// Shrink No
+noFontSize -= 2;
+noPaddingV -= 2;
+noPaddingH -= 2;
 
-        if (noFontSize < 0) noFontSize = 0;
-        if (noPaddingV < 0) noPaddingV = 0;
-        if (noPaddingH < 0) noPaddingH = 0;
+if (noFontSize < 0) noFontSize = 0;
+if (noPaddingV < 0) noPaddingV = 0;
+if (noPaddingH < 0) noPaddingH = 0;
 
-        yesButton.style.fontSize = `${yesFontSize}px`;
-        yesButton.style.padding = `${yesPaddingV}px ${yesPaddingH}px`;
-
-        noButton.style.fontSize = `${noFontSize}px`;
-        noButton.style.padding = `${noPaddingV}px ${noPaddingH}px`;
+noButton.style.fontSize = `${noFontSize}px`;
+noButton.style.padding = `${noPaddingV}px ${noPaddingH}px`;
         
         if (noFontSize === 0) {
             noButton.style.display = "none";
